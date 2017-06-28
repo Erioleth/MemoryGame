@@ -7,13 +7,16 @@ import java.util.Vector;
 import javax.swing.Timer;
 
 import models.Card;
-
+/**
+ * Klasa odpowiadaj¹ca za sprawdzanie odwróconych kart
+ *
+ */
 public class CardController implements ActionListener {
 	private Vector turnedCards;
 	private Timer turnDownTimer;
 	public static int pairCount = 0;
 	private int pairsUp = 0;
-	private final int turnDownDelay=1000; // kill them all!!!! <3
+	private final int turnDownDelay=1000;
 	
 	public CardController() {
 		this.turnedCards=new Vector(2);
@@ -26,7 +29,11 @@ public class CardController implements ActionListener {
 		
 		return false;
 	}
-
+	/**
+	 * Zlicza pary kart i porównuje odwrócone karty
+	 * @param card obiekt klasy Card
+	 * @return Zwraca true
+	 */
 	public boolean doAddCard(Card card) {
 		this.turnedCards.add(card);
 		if(this.turnedCards.size()==2) {
@@ -41,7 +48,7 @@ public class CardController implements ActionListener {
 	}
 	
 	public void actionPerformed(ActionEvent e) {
-		// TODO Auto-generated method stub
+		
 		for(int i=0; i<this.turnedCards.size(); i++) {
 			Card card = (Card)this.turnedCards.get(i);
 			card.turnDown();

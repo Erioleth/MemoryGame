@@ -5,6 +5,10 @@ import javax.swing.JOptionPane;
 
 import controllers.CardController;
 
+/**
+ * klasa odpowiadaj¹ca za licznik czasu
+ *
+ */
 public class Timer extends Thread {
 	int time;
 	JLabel text;
@@ -24,12 +28,13 @@ public class Timer extends Thread {
 			text.setText("Time: " + time);
 			if(CardController.pairCount>=8){
 				JOptionPane.showMessageDialog(null, "Jesteœ zwyciêzc¹!!");
-				time=0;
+				break;
+				
 			}
 			try {
 				sleep(1000);
 			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
+				
 				e.printStackTrace();
 			}
 		}

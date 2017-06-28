@@ -29,45 +29,51 @@ public class MemoryGame implements ActionListener {
 	
 	private Timer czasGry;
 	JLabel time;
+	/**
+	 * Konstruktor, który tworzy okno gry
+	 */
 	public MemoryGame() {
-		// main window
+		
 		this.mainFrame=new JFrame("Memory Game");
 		this.mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.mainFrame.setSize(450, 500); // tutaj rozmiar okna
 		this.mainContentPane=this.mainFrame.getContentPane();
 		this.mainContentPane.setLayout(new BoxLayout(this.mainContentPane, BoxLayout.PAGE_AXIS));
 		
-		// pasek navigacji
+		
 		JMenuBar menuBar = new JMenuBar();
 		this.mainFrame.setJMenuBar(menuBar);
 		
-		// Game Menu
+		
 		JMenu gameMenu=new JMenu("Gra");
 		menuBar.add(gameMenu);
 		
-		// kreator do submenu
+		
 		newMenuItem("Nowa gra", gameMenu, this);
 		newMenuItem("Wyjœcie", gameMenu, this);
 		
-		// Menu o oautorze
+		
 		JMenu aboutMenu=new JMenu("Pomoc");
 		menuBar.add(aboutMenu);
 		
 		newMenuItem("Autorzy", aboutMenu, this);
 		newMenuItem("Instrukcja obs³ugi", aboutMenu, this);
-		// load cards
+		
 		this.cardIcon=this.loadCardIcons();
-		// timer
-		time = new JLabel("Time: ");
+		
+		time = new JLabel();
 		time.setVisible(true);
 		this.mainContentPane.add(time);
 		czasGry = new Timer(time);
 		czasGry.start();
 
 	}
-	
+	/**
+	 * Wczytuje ikony
+	 * @return tablica ikon
+	 */
 	private ImageIcon[] loadCardIcons() {
-		// TODO Auto-generated method stub
+		
 		ImageIcon icon[]=new ImageIcon[9];
 		for(int i=0; i<9; i++) {
 			String fileName = "images/card"+i+".png";
@@ -79,23 +85,27 @@ public class MemoryGame implements ActionListener {
 		return icon;
 	}
 	
+	/**
+	 * Tworzy tablicê kart
+	 * @return panel z kartami
+	 */
 	public JPanel makeCards() {
 		JPanel panel=new JPanel(new GridLayout(4, 4));
 		
-		// wszystkie karty maja ten sam spod
+		
 		ImageIcon backIcon=this.cardIcon[8];
 		CardController controller=new CardController();
 		
-		int[] cardsToAdd=new int[16]; // 4 x 4 daje 16
+		int[] cardsToAdd=new int[16];
 		for(int i=0; i<8; i++) {
 			cardsToAdd[2*i]=i;
 			cardsToAdd[2*i+1]=i;
 		}
 		
-		// randomize
+		
 		randomizeCardArray(cardsToAdd);
 		
-		// tworzymy obiekt karty
+		
 		for(int i=0; i< cardsToAdd.length; i++) {
 			int num=cardsToAdd[i];
 			Card newCard=new Card(controller, this.cardIcon[num], backIcon, num);
@@ -105,55 +115,68 @@ public class MemoryGame implements ActionListener {
 		return panel;
 	}
 	
-
+	/**
+	 * Miesza tablicê kart
+	 * @param wymieszana tablica kart
+	 */
 	private void randomizeCardArray(int[] t) {
-		// TODO Auto-generated method stub
+		
 		Random randomizer=new Random();
 		for(int i=0; i<t.length; i++) {
 			int d=randomizer.nextInt(t.length);
-			// swap!
+			
 			int tmp = t[d];
 			t[d] = t[i];
-			t[i] = tmp; // !! <3
+			t[i] = tmp;
 		}
 	}
 
 	private void newMenuItem(String string, JMenu menu, ActionListener listener) {
-		// TODO Auto-generated method stub
+		
 		JMenuItem newItem =new JMenuItem(string);
 		newItem.setActionCommand(string);
 		newItem.addActionListener(listener);
 		menu.add(newItem);
 	}
-
+	
+	/**
+	 * Uruchamia now¹ grê
+	 */
+	
 	public void newGame() {
-		// resetujemy gre
-		czasGry.zeruj();
 		
+		czasGry.zeruj();
 		this.mainContentPane.removeAll();
-		// make a new card set visible
+		
 		this.mainContentPane.add(makeCards());
-		// draw a timer
+		
 		this.mainContentPane.add(time);
-		// show main window
+		
 		this.mainFrame.setVisible(true);
 	}
 	
+	/**
+	 * Obs³uguje menu
+	 */
+	
 	public void actionPerformed(ActionEvent e) {
-		// TODO Auto-generated method stub
+		
 		if(e.getActionCommand().equals("Nowa gra")) newGame();
 		if(e.getActionCommand().equals("Autorzy")) newAuthors();
 		if(e.getActionCommand().equals("Instrukcja obs³ugi")) newHelps();
 		if(e.getActionCommand().equals("Wyjœcie")) System.exit(0);
 	}
 
+	/**
+	 * Wyœwietla okno z autorami
+	 */
 	private void newAuthors() {
-		// TODO Auto-generated method stub
+		
 		if(this.autorsOpened) return;
 		
 		JFrame mainFrame=new JFrame("Autorzy:");
 		mainFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		mainFrame.setSize(400, 115); // tutaj rozmiar okna
+		mainFrame.setSize(400, 115);
 		mainFrame.setVisible(true);
 		
 		JLabel text = new JLabel("<html>Autorzy:<br>Monika Molenda<br>Rados³aw Smutek<br>2ID15A</html>", SwingConstants.CENTER);
@@ -164,15 +187,17 @@ public class MemoryGame implements ActionListener {
 		mainFrame.add(text);
 		
 		
-//		this.autorsOpened=true;
+		/**
+		 * WYœwietla okno z instrukcj¹ obs³ugi
+		 */
 	}
 	private void newHelps() {
-		// TODO Auto-generated method stub
+		
 		if(this.autorsOpened) return;
 		
 		JFrame mainFrame=new JFrame("Instrukcja obs³ugi:");
 		mainFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		mainFrame.setSize(400, 300); // tutaj rozmiar okna
+		mainFrame.setSize(400, 300); 
 		mainFrame.setVisible(true);
 		JLabel text = new JLabel("<html>U¿ywaj lewego przycisku myszy do odkrywania kart.<br>Znajduj pary i sprawdz swój czas! <br>Opó¿nienie w odwrocie kart spowodowane jest kar¹, <br>¿e nie trafi³es.<br>Jeœli chcesz, mo¿esz wypiæ shota za ka¿dym<br>razem, gdy nie trafisz, aby dodaæ nieco dramatyzmu.</html>", SwingConstants.CENTER);
 		text.setForeground(Color.orange);
